@@ -85,6 +85,18 @@ public class ProjectContext : DbContext
             .WithMany(s => s.Versions)
             .HasForeignKey(v => v.IdSoftware)
             .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Discount>().HasData(new List<Discount>()
+        {
+            new Discount()
+            {
+                IdDiscount = 1,
+                Name = "Returning clients discount",
+                Offer = "Discount for upfront cost",
+                Value = 5,
+                TimeStart = DateTime.UnixEpoch,
+                TimeEnd = DateTime.MaxValue,
+            }
+        });
 
         base.OnModelCreating(modelBuilder);
     }

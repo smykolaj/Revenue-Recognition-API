@@ -6,11 +6,43 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Project.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class SecondTry : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AppUsers",
+                columns: table => new
+                {
+                    IdUser = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RefreshTokenExp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUsers", x => x.IdUser);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    IdCategory = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.IdCategory);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
@@ -56,7 +88,8 @@ namespace Project.Migrations
                     Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
-                    Pesel = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false)
+                    Pesel = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,12 +104,40 @@ namespace Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdCategory = table.Column<long>(type: "bigint", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Softwares", x => x.IdSoftware);
+                    table.ForeignKey(
+                        name: "FK_Softwares_Categories_IdCategory",
+                        column: x => x.IdCategory,
+                        principalTable: "Categories",
+                        principalColumn: "IdCategory",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Versions",
+                columns: table => new
+                {
+                    IdVersion = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VersionNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdSoftware = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Versions", x => x.IdVersion);
+                    table.ForeignKey(
+                        name: "FK_Versions_Softwares_IdSoftware",
+                        column: x => x.IdSoftware,
+                        principalTable: "Softwares",
+                        principalColumn: "IdSoftware",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,6 +153,7 @@ namespace Project.Migrations
                     IdIndividual = table.Column<long>(type: "bigint", nullable: true),
                     IdCompany = table.Column<long>(type: "bigint", nullable: true),
                     IdSoftware = table.Column<long>(type: "bigint", nullable: false),
+                    IdVersion = table.Column<long>(type: "bigint", nullable: false),
                     ContinuedSupportYears = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -101,38 +163,26 @@ namespace Project.Migrations
                         name: "FK_Contracts_Companies_IdCompany",
                         column: x => x.IdCompany,
                         principalTable: "Companies",
-                        principalColumn: "IdCompany");
+                        principalColumn: "IdCompany",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Contracts_Individuals_IdIndividual",
                         column: x => x.IdIndividual,
                         principalTable: "Individuals",
-                        principalColumn: "IdIndividual");
+                        principalColumn: "IdIndividual",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Contracts_Softwares_IdSoftware",
                         column: x => x.IdSoftware,
                         principalTable: "Softwares",
                         principalColumn: "IdSoftware",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Versions",
-                columns: table => new
-                {
-                    IdSoftware = table.Column<long>(type: "bigint", nullable: false),
-                    VersionNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Versions", x => x.IdSoftware);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Versions_Softwares_IdSoftware",
-                        column: x => x.IdSoftware,
-                        principalTable: "Softwares",
-                        principalColumn: "IdSoftware",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Contracts_Versions_IdVersion",
+                        column: x => x.IdVersion,
+                        principalTable: "Versions",
+                        principalColumn: "IdVersion",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,39 +217,17 @@ namespace Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    ContractIdContract = table.Column<long>(type: "bigint", nullable: true)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdContract = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.IdPayment);
                     table.ForeignKey(
-                        name: "FK_Payments_Contracts_ContractIdContract",
-                        column: x => x.ContractIdContract,
-                        principalTable: "Contracts",
-                        principalColumn: "IdContract");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PaymentContracts",
-                columns: table => new
-                {
-                    IdPayment = table.Column<int>(type: "int", nullable: false),
-                    IdContract = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentContracts", x => new { x.IdPayment, x.IdContract });
-                    table.ForeignKey(
-                        name: "FK_PaymentContracts_Contracts_IdContract",
+                        name: "FK_Payments_Contracts_IdContract",
                         column: x => x.IdContract,
                         principalTable: "Contracts",
                         principalColumn: "IdContract",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PaymentContracts_Payments_IdPayment",
-                        column: x => x.IdPayment,
-                        principalTable: "Payments",
-                        principalColumn: "IdPayment",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -224,33 +252,40 @@ namespace Project.Migrations
                 column: "IdSoftware");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentContracts_IdContract",
-                table: "PaymentContracts",
+                name: "IX_Contracts_IdVersion",
+                table: "Contracts",
+                column: "IdVersion");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_IdContract",
+                table: "Payments",
                 column: "IdContract");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_ContractIdContract",
-                table: "Payments",
-                column: "ContractIdContract");
+                name: "IX_Softwares_IdCategory",
+                table: "Softwares",
+                column: "IdCategory");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Versions_IdSoftware",
+                table: "Versions",
+                column: "IdSoftware");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AppUsers");
+
+            migrationBuilder.DropTable(
                 name: "ContractDiscounts");
 
             migrationBuilder.DropTable(
-                name: "PaymentContracts");
-
-            migrationBuilder.DropTable(
-                name: "Versions");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Discounts");
-
-            migrationBuilder.DropTable(
-                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Contracts");
@@ -262,7 +297,13 @@ namespace Project.Migrations
                 name: "Individuals");
 
             migrationBuilder.DropTable(
+                name: "Versions");
+
+            migrationBuilder.DropTable(
                 name: "Softwares");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

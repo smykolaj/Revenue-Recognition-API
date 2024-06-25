@@ -3,6 +3,7 @@ using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.DTOs.Put;
 using Project.Models;
+using Version = Project.Models.Version;
 
 namespace Project.Services;
 
@@ -113,6 +114,33 @@ public class Mapper
             Description = addSoftware.Description,
             IdCategory = addSoftware.IdCategory,
             Price = addSoftware.Price
+        };
+        return dto;
+    }
+
+    public Version Map(VersionPostDto addVersion)
+    {
+        Version newVersion = new Version()
+        {
+            VersionNumber = addVersion.VersionNumber,
+            Date = addVersion.Date,
+            Comments = addVersion.Comments,
+            IdSoftware = addVersion.IdSoftware
+            
+        };
+        return newVersion;
+    }
+
+    public VersionGetDto Map(Version addVersion)
+    {
+        VersionGetDto dto = new VersionGetDto()
+        {
+            IdVersion = addVersion.IdVersion,
+            VersionNumber = addVersion.VersionNumber,
+            Date = addVersion.Date,
+            Comments = addVersion.Comments,
+            IdSoftware = addVersion.IdSoftware
+            
         };
         return dto;
     }

@@ -3,6 +3,7 @@ using Project.DTOs.Post;
 using Project.Exceptions;
 using Project.Models;
 using Project.Services.Interfaces;
+using Version = Project.Models.Version;
 
 namespace Project.Services;
 
@@ -40,8 +41,13 @@ public class SoftwareService : ISoftwareService
         return returnDto;
     }
 
-    public Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto)
+    public async Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto)
     {
-        throw new NotImplementedException();
+        if (await _unitOfWork.Softwares.ExistsById(dto.IdSoftware))
+            throw new DoesntExistException("software", "idSoftware");
+
+        Version newVersion = _mapper.Map(dto);
+        VersionGetDto returnDto = _mapper.Map( await _unitOfWork.Versions.AddVersion(newVersion));
+        return returnDto;
     }
 }

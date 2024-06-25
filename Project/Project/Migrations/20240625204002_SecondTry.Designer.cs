@@ -12,8 +12,8 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20240625203433_OoopsDeletedTableVersions")]
-    partial class OoopsDeletedTableVersions
+    [Migration("20240625204002_SecondTry")]
+    partial class SecondTry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -355,7 +355,7 @@ namespace Project.Migrations
 
                     b.HasIndex("IdSoftware");
 
-                    b.ToTable("Version");
+                    b.ToTable("Versions");
                 });
 
             modelBuilder.Entity("Project.Models.Contract", b =>

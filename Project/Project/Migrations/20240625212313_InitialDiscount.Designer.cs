@@ -12,8 +12,8 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20240625203555_OoopsAddedTableVersions")]
-    partial class OoopsAddedTableVersions
+    [Migration("20240625212313_InitialDiscount")]
+    partial class InitialDiscount
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,6 +217,17 @@ namespace Project.Migrations
                     b.HasKey("IdDiscount");
 
                     b.ToTable("Discounts");
+
+                    b.HasData(
+                        new
+                        {
+                            IdDiscount = 1L,
+                            Name = "Returning clients discount",
+                            Offer = "Discount for upfront cost",
+                            TimeEnd = new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999),
+                            TimeStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Value = 5m
+                        });
                 });
 
             modelBuilder.Entity("Project.Models.Individual", b =>

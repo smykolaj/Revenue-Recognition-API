@@ -1,4 +1,5 @@
-﻿using Project.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Context;
 using Project.Models;
 using Project.Repositories.Interfaces;
 
@@ -18,5 +19,10 @@ public class SoftwaresRepository : ISoftwaresRepository
         await _context.AddAsync(newSoftware);
         await _context.SaveChangesAsync();
         return newSoftware;
+    }
+
+    public async Task<bool> ExistsById(long dtoIdSoftware)
+    {
+        return await _context.Softwares.AnyAsync(s => s.IdSoftware.Equals(dtoIdSoftware));
     }
 }

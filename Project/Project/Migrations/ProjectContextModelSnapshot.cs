@@ -214,6 +214,17 @@ namespace Project.Migrations
                     b.HasKey("IdDiscount");
 
                     b.ToTable("Discounts");
+
+                    b.HasData(
+                        new
+                        {
+                            IdDiscount = 1L,
+                            Name = "Returning clients discount",
+                            Offer = "Discount for upfront cost",
+                            TimeEnd = new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999),
+                            TimeStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Value = 5m
+                        });
                 });
 
             modelBuilder.Entity("Project.Models.Individual", b =>
