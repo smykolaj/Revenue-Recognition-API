@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project.Context;
 
@@ -11,9 +12,11 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    partial class ProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240625203433_OoopsDeletedTableVersions")]
+    partial class OoopsDeletedTableVersions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,7 +355,7 @@ namespace Project.Migrations
 
                     b.HasIndex("IdSoftware");
 
-                    b.ToTable("Versions");
+                    b.ToTable("Version");
                 });
 
             modelBuilder.Entity("Project.Models.Contract", b =>

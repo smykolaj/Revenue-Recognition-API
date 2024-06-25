@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Project.Models;
@@ -16,5 +17,11 @@ public class Payment
     [Required] [MaxLength(10)] 
     public string Status { get; set; } = string.Empty;
 
-    public ICollection<PaymentContract> PaymentContracts { get; set; } = new HashSet<PaymentContract>();
+    [Required]
+    public DateTime Date { get; set; }
+
+
+    public long IdContract { get; set; }
+    [ForeignKey(nameof(IdContract))]
+    public Contract Contract { get; set; } = null!;
 }

@@ -35,10 +35,17 @@ public class Contract
     public long IdSoftware { get; set; }
     [ForeignKey(nameof(IdSoftware))] 
     public Software Software { get; set; } = null!;
+       
+    public long IdVersion { get; set; }
+    [ForeignKey(nameof(IdVersion))]
+    public Version Version { get; set; }  = null!;
+    
+ 
 
     [Required]
     public int ContinuedSupportYears { get; set; }
 
+    
     public ICollection<ContractDiscount> ContractDiscounts { get; set; } = new HashSet<ContractDiscount>();
     public ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
 }

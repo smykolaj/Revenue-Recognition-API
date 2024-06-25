@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project.Models;
+namespace Project.DTOs.Post;
 
-public class Company
+public class CompanyPostDto
 {
-    [Key]
-    public long IdCompany { get; set; }
-
     [Required] [MaxLength(100)] [MinLength(2)]
     public string CompanyName { get; set; } = string.Empty;
 
@@ -22,8 +19,6 @@ public class Company
     public string PhoneNumber { get; set; }= string.Empty;
 
     [Required]
-    [MaxLength(14)] [MinLength(9)]
+    [MaxLength(14)]
     public string Krs { get; set; }= string.Empty;
-
-    public ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
 }

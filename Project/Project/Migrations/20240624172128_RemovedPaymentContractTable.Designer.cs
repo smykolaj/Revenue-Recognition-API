@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project.Context;
 
@@ -11,9 +12,11 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    partial class ProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240624172128_RemovedPaymentContractTable")]
+    partial class RemovedPaymentContractTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +79,7 @@ namespace Project.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Project.Models.Company", b =>
@@ -144,9 +147,6 @@ namespace Project.Migrations
                     b.Property<long>("IdSoftware")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("IdVersion")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -162,8 +162,6 @@ namespace Project.Migrations
                     b.HasIndex("IdIndividual");
 
                     b.HasIndex("IdSoftware");
-
-                    b.HasIndex("IdVersion");
 
                     b.ToTable("Contracts");
                 });
@@ -238,9 +236,6 @@ namespace Project.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -326,11 +321,8 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.Version", b =>
                 {
-                    b.Property<long>("IdVersion")
-                        .ValueGeneratedOnAdd()
+                    b.Property<long>("IdSoftware")
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdVersion"));
 
                     b.Property<string>("Comments")
                         .IsRequired()
@@ -340,17 +332,12 @@ namespace Project.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("IdSoftware")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("VersionNumber")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("IdVersion");
-
-                    b.HasIndex("IdSoftware");
+                    b.HasKey("IdSoftware");
 
                     b.ToTable("Versions");
                 });
@@ -359,24 +346,16 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.Company", "Company")
                         .WithMany("Contracts")
-                        .HasForeignKey("IdCompany")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("IdCompany");
 
                     b.HasOne("Project.Models.Individual", "Individual")
                         .WithMany("Contracts")
-                        .HasForeignKey("IdIndividual")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("IdIndividual");
 
                     b.HasOne("Project.Models.Software", "Software")
                         .WithMany("Contracts")
                         .HasForeignKey("IdSoftware")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Project.Models.Version", "Version")
-                        .WithMany("Contracts")
-                        .HasForeignKey("IdVersion")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -384,8 +363,6 @@ namespace Project.Migrations
                     b.Navigation("Individual");
 
                     b.Navigation("Software");
-
-                    b.Navigation("Version");
                 });
 
             modelBuilder.Entity("Project.Models.ContractDiscount", b =>
@@ -472,11 +449,6 @@ namespace Project.Migrations
                     b.Navigation("Contracts");
 
                     b.Navigation("Versions");
-                });
-
-            modelBuilder.Entity("Project.Models.Version", b =>
-                {
-                    b.Navigation("Contracts");
                 });
 #pragma warning restore 612, 618
         }

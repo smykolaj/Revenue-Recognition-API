@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Project.Services.Interfaces;
 
-namespace Project.Models;
+namespace Project.DTOs.Post;
 
-public class Individual : ISoftDelete
+public class IndividualPostDto
 {
-    [Key]
-    public long IdIndividual { get; set; }
-
     [Required] [MaxLength(100)] [MinLength(2)]
     public string FirstName { get; set; }= string.Empty;
 
@@ -22,11 +18,7 @@ public class Individual : ISoftDelete
 
     [Required] [MaxLength(12)] [Phone]
     public string PhoneNumber { get; set; }= string.Empty;
-    
-    [Required] [MaxLength(11)] [MinLength(11)]
+
+    [Required] [MaxLength(11)]
     public string Pesel { get; set; }= string.Empty;
-
-    public bool IsDeleted { get; set; } = false;
-
-    public ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
 }
