@@ -21,7 +21,7 @@ public class ProjectContext : DbContext
     public DbSet<Version> Versions { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Contract> Contracts { get; set; }
-    public DbSet<ContractDiscount> ContractDiscounts { get; set; }
+    // public DbSet<ContractDiscount> ContractDiscounts { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<AppUser> AppUsers { get; set; }
@@ -85,18 +85,7 @@ public class ProjectContext : DbContext
             .WithMany(s => s.Versions)
             .HasForeignKey(v => v.IdSoftware)
             .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Discount>().HasData(new List<Discount>()
-        {
-            new Discount()
-            {
-                IdDiscount = 1,
-                Name = "Returning clients discount",
-                Offer = "Discount for upfront cost",
-                Value = 5,
-                TimeStart = DateTime.UnixEpoch,
-                TimeEnd = DateTime.MaxValue,
-            }
-        });
+        
 
         base.OnModelCreating(modelBuilder);
     }

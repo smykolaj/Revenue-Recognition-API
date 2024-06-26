@@ -1,4 +1,5 @@
-﻿using Project.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Context;
 using Project.DTOs.Post;
 using Project.Repositories.Interfaces;
 using Version = Project.Models.Version;
@@ -19,5 +20,17 @@ public class VersionsRepository : IVersionsRepository
         await _context.AddAsync(newVersion);
         await _context.SaveChangesAsync();
         return newVersion;
+    }
+
+    public async Task<bool> ExistsById(long dtoIdVersion)
+    {
+        return await _context.Versions.AnyAsync(v => v.IdVersion.Equals(dtoIdVersion));
+
+    }
+
+    public async Task<bool> VersionIsAssociatedWith(long dtoIdVersion, long dtoIdSoftware)
+    {
+        return await _context.Versions.AnyAsync(
+            v => v.IdVersion.Equals(dtoIdVersion) && v.IdSoftware.Equals(dtoIdSoftware));
     }
 }

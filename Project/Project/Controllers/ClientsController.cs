@@ -3,6 +3,7 @@ using Project.DTOs;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.DTOs.Put;
+using Project.Exceptions;
 using Project.Services.Interfaces;
 
 namespace Project.Controllers;
@@ -25,15 +26,20 @@ public class ClientsController : ControllerBase
     {
         try
         {
-           var newIndividual = await  _clientsService.AddIndividualClient(client);
-           return Ok(newIndividual);
+            var newIndividual = await _clientsService.AddIndividualClient(client);
+            return Ok(newIndividual);
         }
+        catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
+        }
+
         catch (Exception e)
         {
             return BadRequest(e.Message);
-        } 
-        
-        
+        }
+
+
     }
     
     [Tags("Create a new client")]
@@ -44,6 +50,9 @@ public class ClientsController : ControllerBase
         {
             CompanyGetDto newCompany = await  _clientsService.AddCompanyClient(client);
             return Ok(newCompany);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
@@ -61,6 +70,9 @@ public class ClientsController : ControllerBase
         {
             await _clientsService.SoftDeleteIndividualClient(idIndividual);
             return Ok();
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
@@ -73,8 +85,11 @@ public class ClientsController : ControllerBase
     {
         try
         {
-            await _clientsService.UpdateDataAboutIndividual(idIndividual, client);
-            return Ok();
+           var res =  await _clientsService.UpdateDataAboutIndividual(idIndividual, client);
+            return Ok(res);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
@@ -87,8 +102,11 @@ public class ClientsController : ControllerBase
     {
         try
         {
-            await _clientsService.UpdateDataAboutCompany(idCompany, client);
-            return Ok();
+            var res = await _clientsService.UpdateDataAboutCompany(idCompany, client);
+            return Ok(res);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {

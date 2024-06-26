@@ -118,14 +118,14 @@ public class Mapper
         return dto;
     }
 
-    public Version Map(VersionPostDto addVersion)
+    public Version Map(VersionPostDto addVersion, long idSoftware)
     {
         Version newVersion = new Version()
         {
             VersionNumber = addVersion.VersionNumber,
             Date = addVersion.Date,
             Comments = addVersion.Comments,
-            IdSoftware = addVersion.IdSoftware
+            IdSoftware = idSoftware
             
         };
         return newVersion;
@@ -143,5 +143,92 @@ public class Mapper
             
         };
         return dto;
+    }
+
+    public Discount Map(DiscountPostDto addDiscount)
+    {
+        Discount discount = new Discount()
+        {
+            Name = addDiscount.Name,
+            Offer = addDiscount.Offer,
+            Value = addDiscount.Value,
+            TimeEnd = addDiscount.TimeEnd,
+            TimeStart = addDiscount.TimeStart
+        };
+        return discount;
+    }
+
+    public DiscountGetDto Map(Discount addDiscount)
+    {
+        DiscountGetDto dto = new DiscountGetDto()
+        {
+            IdDiscount = addDiscount.IdDiscount,
+            Name = addDiscount.Name,
+            Offer = addDiscount.Offer,
+            Value = addDiscount.Value,
+            TimeEnd = addDiscount.TimeEnd,
+            TimeStart = addDiscount.TimeStart
+        };
+        return dto;
+        
+    }
+
+    public Contract Map(ContractPostDto dto, decimal price, string status, string typeOfClient)
+    {
+        Contract newContract = new Contract()
+        {
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate,
+            Status = status,
+            FullPrice = price,
+            IdSoftware = dto.IdSoftware,
+            IdVersion = dto.IdVersion,
+            ContinuedSupportYears = dto.ContinuedSupportYears
+        };
+        switch (typeOfClient)
+        {
+            case "Company":
+                newContract.IdCompany = dto.IdClient;
+                break;
+            case "Individual":
+                newContract.IdIndividual = dto.IdClient;
+                break;
+        }
+
+        return newContract;
+    }
+
+    public ContractGetDto Map(Contract addContract)
+    {
+        long id;
+        string type;
+        if (addContract.IdIndividual is null)
+        {
+            id = (long)addContract.IdCompany!;
+            type = "Company";
+
+        }
+        else
+        {
+            id = (long)addContract.IdIndividual!;
+            type = "Individual";
+        }
+        
+
+        ContractGetDto dto = new ContractGetDto()
+        {
+            IdContract = addContract.IdContract,
+            StartDate = addContract.StartDate,
+            EndDate = addContract.EndDate,
+            IdClient = id,
+            TypeOfClient = type,
+            Status = addContract.Status,
+            FullPrice = addContract.FullPrice,
+            IdSoftware = addContract.IdSoftware,
+            IdVersion = addContract.IdVersion,
+            ContinuedSupportYears = addContract.ContinuedSupportYears
+        };
+        return dto;
+    
     }
 }

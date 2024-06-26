@@ -1,4 +1,5 @@
 ﻿using Project.Context;
+using Project.DTOs.Post;
 using Project.Repositories;
 using Project.Repositories.Interfaces;
 using Project.Services.Interfaces;
@@ -13,6 +14,9 @@ public class UnitOfWork : IUnitOfWork
     private ISoftwaresRepository? _softwareRepository;
     private IVersionsRepository? _versionsRepository;
     private ICategoriesRepository? _categoriesRepository;
+    private IDiscountsRepository? _discountsRepository;
+    private IContractsRepository? _contractsRepository;
+    
 
     public UnitOfWork(ProjectContext context)
     {
@@ -24,7 +28,9 @@ public class UnitOfWork : IUnitOfWork
     public ISoftwaresRepository Softwares => _softwareRepository ??= new SoftwaresRepository(_context);
     public IVersionsRepository Versions => _versionsRepository ??= new VersionsRepository(_context);
     public ICategoriesRepository Categories => _categoriesRepository ??= new CategoriesRepository(_context);
-
+    public IDiscountsRepository Discounts => _discountsRepository ??= new DiscountsRepository(_context);
+    public IContractsRepository Contracts => _contractsRepository ??= new ContractsRepository(_context);
+    
     public async Task<int> CompleteAsync()
     {
         return await _context.SaveChangesAsync();

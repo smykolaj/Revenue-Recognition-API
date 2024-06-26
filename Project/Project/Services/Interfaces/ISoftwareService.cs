@@ -7,5 +7,5 @@ public interface ISoftwareService
 {
     Task<SoftwareGetDto> AddSoftware(SoftwarePostDto dto);
     Task<CategoryGetDto> AddCategory(CategoryPostDto dto);
-    Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto);
+    Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto, long idSoftware);
 }

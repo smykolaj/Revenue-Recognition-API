@@ -15,7 +15,7 @@ public class Contract
     [Required]
     public DateTime EndDate { get; set; }
 
-    [Required] [MaxLength(20)] 
+    [Required] [MaxLength(20)] [ConcurrencyCheck]
     public string Status { get; set; } = string.Empty;
 
     [Required]
@@ -35,7 +35,8 @@ public class Contract
     public long IdSoftware { get; set; }
     [ForeignKey(nameof(IdSoftware))] 
     public Software Software { get; set; } = null!;
-       
+    
+    [Required]
     public long IdVersion { get; set; }
     [ForeignKey(nameof(IdVersion))]
     public Version Version { get; set; }  = null!;
@@ -46,6 +47,6 @@ public class Contract
     public int ContinuedSupportYears { get; set; }
 
     
-    public ICollection<ContractDiscount> ContractDiscounts { get; set; } = new HashSet<ContractDiscount>();
+    // public ICollection<ContractDiscount> ContractDiscounts { get; set; } = new HashSet<ContractDiscount>();
     public ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
 }

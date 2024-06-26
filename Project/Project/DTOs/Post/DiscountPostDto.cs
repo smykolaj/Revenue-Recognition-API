@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Project.Models;
+namespace Project.DTOs.Post;
 
-public class Discount
+public class DiscountPostDto
 {
-    [Key]
-    public long IdDiscount { get; set; }
-
     [Required] [MaxLength(100)] 
     public string Name { get; set; } = string.Empty;
 
@@ -16,7 +13,7 @@ public class Discount
 
     [Required]
     [DataType("decimal")]
-    [Precision(4, 2)]
+    [Precision(3, 2)]
     public decimal Value { get; set; }
 
     [Required]
@@ -24,6 +21,4 @@ public class Discount
 
     [Required]
     public DateTime TimeEnd { get; set; }
-
-    // public ICollection<ContractDiscount> ContractDiscounts { get; set; } = new HashSet<ContractDiscount>();
 }

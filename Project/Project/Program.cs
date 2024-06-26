@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IClientsService, ClientsService>();
 builder.Services.AddScoped<ISoftwareService, SoftwareService>();
+builder.Services.AddScoped<IDiscountsService, DiscountsService>();
+builder.Services.AddScoped<IContractsService, ContractsService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(Mapper));
 builder.Services.AddSwaggerGen(c =>
@@ -105,17 +107,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
 }
-// app.UseMiddleware<CustomExceptionHandler>();
 
 app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 
 

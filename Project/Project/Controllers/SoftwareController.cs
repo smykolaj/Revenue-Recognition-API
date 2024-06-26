@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
+using Project.Exceptions;
 using Project.Services.Interfaces;
 
 namespace Project.Controllers;
@@ -15,6 +16,9 @@ public class SoftwareController : ControllerBase
     {
         _softwareService = softwareService;
     }
+    
+    //TODO : find latest software version 
+    //TODO: get all, get by id
 
 
     [HttpPost]
@@ -24,6 +28,9 @@ public class SoftwareController : ControllerBase
         {
             SoftwareGetDto newSoftware = await  _softwareService.AddSoftware(dto);
             return Ok(newSoftware);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
@@ -38,6 +45,9 @@ public class SoftwareController : ControllerBase
         {
             CategoryGetDto newCategory = await  _softwareService.AddCategory(dto);
             return Ok(newCategory);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
@@ -50,8 +60,11 @@ public class SoftwareController : ControllerBase
     {
         try
         {
-            VersionGetDto newVersion = await  _softwareService.AddSoftwareVersion(dto);
+            VersionGetDto newVersion = await  _softwareService.AddSoftwareVersion(dto, idSoftware);
             return Ok(newVersion);
+        }catch (DoesntExistException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {

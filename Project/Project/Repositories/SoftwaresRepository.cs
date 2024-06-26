@@ -25,4 +25,9 @@ public class SoftwaresRepository : ISoftwaresRepository
     {
         return await _context.Softwares.AnyAsync(s => s.IdSoftware.Equals(dtoIdSoftware));
     }
+
+    public async Task<decimal> GetSoftwarePrice(long dtoIdSoftware)
+    {
+        return await _context.Softwares.Where(s => s.IdSoftware.Equals(dtoIdSoftware)).Select(s => s.Price).FirstAsync();
+    }
 }

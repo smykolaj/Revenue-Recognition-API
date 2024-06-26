@@ -7,4 +7,5 @@ public interface ISoftwaresRepository
 {
     Task<Software> AddSoftware(Software newSoftware);
     Task<bool> ExistsById(long dtoIdSoftware);
+    Task<decimal> GetSoftwarePrice(long dtoIdSoftware);
 }

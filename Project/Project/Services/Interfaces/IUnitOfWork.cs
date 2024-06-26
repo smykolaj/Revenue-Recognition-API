@@ -9,5 +9,7 @@ public interface IUnitOfWork : IDisposable
     ISoftwaresRepository Softwares { get; }
     IVersionsRepository Versions { get; }
     ICategoriesRepository Categories { get; }
+    IDiscountsRepository Discounts { get; }
+    IContractsRepository Contracts { get; }
     Task<int> CompleteAsync();
 }

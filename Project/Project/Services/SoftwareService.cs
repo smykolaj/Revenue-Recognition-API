@@ -41,12 +41,12 @@ public class SoftwareService : ISoftwareService
         return returnDto;
     }
 
-    public async Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto)
+    public async Task<VersionGetDto> AddSoftwareVersion(VersionPostDto dto, long idSoftware)
     {
-        if (await _unitOfWork.Softwares.ExistsById(dto.IdSoftware))
+        if (!await _unitOfWork.Softwares.ExistsById(idSoftware))
             throw new DoesntExistException("software", "idSoftware");
 
-        Version newVersion = _mapper.Map(dto);
+        Version newVersion = _mapper.Map(dto, idSoftware);
         VersionGetDto returnDto = _mapper.Map( await _unitOfWork.Versions.AddVersion(newVersion));
         return returnDto;
     }

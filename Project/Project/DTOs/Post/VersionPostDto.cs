@@ -14,6 +14,5 @@ public class VersionPostDto
     [Required] [MaxLength(100)]
     public string Comments { get; set; } = string.Empty;
 
-    [Required]
-    public long IdSoftware { get; set; }
+   
 }
