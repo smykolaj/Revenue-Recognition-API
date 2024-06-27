@@ -11,5 +11,6 @@ public interface IUnitOfWork : IDisposable
     ICategoriesRepository Categories { get; }
     IDiscountsRepository Discounts { get; }
     IContractsRepository Contracts { get; }
+    IPaymentsRepository Payments { get; }
     Task<int> CompleteAsync();
 }

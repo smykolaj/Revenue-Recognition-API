@@ -34,7 +34,7 @@ public class ContractsService : IContractsService
         if (! await _unitOfWork.Versions.VersionIsAssociatedWith(dto.IdVersion, dto.IdSoftware))
             throw new Exception("The version is not associated with this software");
         
-        if (!this.ContractDateRangeIsCorrect(dto.StartDate, dto.EndDate))
+        if (!ContractDateRangeIsCorrect(dto.StartDate, dto.EndDate))
             throw new Exception("The time range of the contract has to be between 3 and 30 days.");
 
         if (dto.TypeOfClient.Equals("Individual") && await _unitOfWork.Contracts.IndividualHasActiveContract(dto.IdClient, dto.IdSoftware)
@@ -45,7 +45,7 @@ public class ContractsService : IContractsService
         var totalDiscountPercentage = await CalculateTotalDiscount(isReturningClient);
         var totalPrice = await CalculateTotalPrice(dto.IdSoftware, totalDiscountPercentage, dto.ContinuedSupportYears);
         
-        Contract newContract = _mapper.Map(dto, totalPrice, "Created", dto.TypeOfClient);
+        Contract newContract = _mapper.Map(dto, totalPrice, _unitOfWork.Contracts.ContractStatusCreated, dto.TypeOfClient);
         ContractGetDto returnDto = _mapper.Map( await _unitOfWork.Contracts.AddContract(newContract));
         return returnDto;
 
@@ -54,6 +54,46 @@ public class ContractsService : IContractsService
     public async Task<decimal> CalculateTotalPrice(long dtoIdSoftware, decimal totalDiscountPercentage, int continuedSupportYears)
     {
         return (await _unitOfWork.Softwares.GetSoftwarePrice(dtoIdSoftware) + 1000 * (continuedSupportYears - 1)) * (1 - totalDiscountPercentage / 100); 
+    }
+
+    public async Task<PaymentGetDto> AddPayment(long idContract, decimal amount)
+    {
+        if (!await _unitOfWork.Contracts.ExistsById(idContract))
+            throw new DoesntExistException("contract", nameof(idContract));
+
+        if (!await _unitOfWork.Contracts.ContractCanBePaid(idContract))
+        {
+            await _unitOfWork.Payments.SetAllContractPaymentsToCancelled(idContract);
+            throw new Exception("Date for payment has finished. " +
+                                "\n All previous payments will be cancelled." +
+                                "\n Please create a new contract");
+        }
+
+        if (!await _unitOfWork.Contracts.NewPaymentDoesntExceedFullPrice(idContract, amount))
+            throw new Exception("Payment is too big. Transaction is cancelled");
+        var isFull = await _unitOfWork.Contracts.AmountEqualsFullPrice(idContract, amount);
+        string status;
+        
+        if (isFull)
+        {
+            status = _unitOfWork.Payments.PaymentStatusFull;
+            await _unitOfWork.Contracts.SetStatusToSigned(idContract);
+        }
+        else
+        {
+            status = _unitOfWork.Payments.PaymentStatusPartial;
+            await _unitOfWork.Contracts.SetStatusToPending(idContract);
+        }
+        var newPayment = new Payment
+        {
+            Amount = amount,
+            Status = status,
+            Date = DateTime.Now,
+            IdContract = idContract
+        };
+        newPayment=  await _unitOfWork.Payments.AddPayment(newPayment);
+        await _unitOfWork.CompleteAsync();
+        return _mapper.Map(newPayment);
     }
 
     public async Task<decimal> CalculateTotalDiscount(bool isReturningClient)

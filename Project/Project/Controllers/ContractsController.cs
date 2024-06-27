@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.Exceptions;
@@ -29,6 +30,7 @@ public class ContractsController : ControllerBase
         {
             return NotFound(e.Message);
         }
+        
         catch (Exception e)
         {
             return BadRequest(e.Message);
@@ -36,18 +38,16 @@ public class ContractsController : ControllerBase
     }
 
     [HttpPost("{idContract}/pay")]
-    public async Task<IActionResult> PayForContract(ContractPostDto dto)
+    public async Task<IActionResult> PayForContract(long idContract, decimal amount)
     {
         try
         {
-
+            PaymentGetDto dto =await  _contractsService.AddPayment(idContract, amount);
+            return Ok(dto);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
-
-        return Ok();
     }
 }

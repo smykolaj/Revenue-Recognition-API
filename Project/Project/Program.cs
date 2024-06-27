@@ -18,6 +18,8 @@ builder.Services.AddScoped<IClientsService, ClientsService>();
 builder.Services.AddScoped<ISoftwareService, SoftwareService>();
 builder.Services.AddScoped<IDiscountsService, DiscountsService>();
 builder.Services.AddScoped<IContractsService, ContractsService>();
+builder.Services.AddScoped<IRevenueService, RevenueService>();
+builder.Services.AddHttpClient<RevenueService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(Mapper));
 builder.Services.AddSwaggerGen(c =>

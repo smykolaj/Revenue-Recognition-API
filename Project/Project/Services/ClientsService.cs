@@ -78,6 +78,7 @@ public class ClientsService : IClientsService
         {
             throw new DoesntExistException("individual", nameof(idIndividual));
         }
+        
 
         
         var oldIndividual = await _unitOfWork.Individuals.GetById(idIndividual);

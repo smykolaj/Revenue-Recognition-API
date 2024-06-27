@@ -8,6 +8,7 @@ namespace Project.Repositories;
 public class CategoriesRepository : ICategoriesRepository
 {
     private readonly ProjectContext _context;
+    
 
     public CategoriesRepository(ProjectContext context)
     {

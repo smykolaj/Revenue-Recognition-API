@@ -15,7 +15,7 @@ public class Contract
     [Required]
     public DateTime EndDate { get; set; }
 
-    [Required] [MaxLength(20)] [ConcurrencyCheck]
+    [Required] [MaxLength(20)] [ConcurrencyCheck]   
     public string Status { get; set; } = string.Empty;
 
     [Required]

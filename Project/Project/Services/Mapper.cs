@@ -231,4 +231,18 @@ public class Mapper
         return dto;
     
     }
+
+    public PaymentGetDto Map(Payment addPayment)
+    {
+        PaymentGetDto dto = new PaymentGetDto()
+        {
+            IdPayment = addPayment.IdPayment,
+            Amount = addPayment.Amount,
+            Status = addPayment.Status,
+            Date = addPayment.Date,
+            IdContract = addPayment.IdContract
+        };
+        return dto;
+        
+    }
 }

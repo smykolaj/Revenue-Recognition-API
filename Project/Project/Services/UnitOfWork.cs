@@ -16,6 +16,7 @@ public class UnitOfWork : IUnitOfWork
     private ICategoriesRepository? _categoriesRepository;
     private IDiscountsRepository? _discountsRepository;
     private IContractsRepository? _contractsRepository;
+    private IPaymentsRepository? _paymentsRepository;
     
 
     public UnitOfWork(ProjectContext context)
@@ -30,6 +31,8 @@ public class UnitOfWork : IUnitOfWork
     public ICategoriesRepository Categories => _categoriesRepository ??= new CategoriesRepository(_context);
     public IDiscountsRepository Discounts => _discountsRepository ??= new DiscountsRepository(_context);
     public IContractsRepository Contracts => _contractsRepository ??= new ContractsRepository(_context);
+    public IPaymentsRepository Payments => _paymentsRepository ??= new PaymentsRepository(_context);
+
     
     public async Task<int> CompleteAsync()
     {
