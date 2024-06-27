@@ -118,7 +118,7 @@ public class LoginService : ILoginService
 
     public LoginResponseModel Refresh(string refreshToken)
     {
-        AppUser user = _context.AppUsers.FirstOrDefault(u => u.RefreshToken == refreshToken)!;
+        var user = _context.AppUsers.FirstOrDefault(u => u.RefreshToken == refreshToken)!;
         if (user == null)
         {
             throw new SecurityTokenException("Invalid refresh token");

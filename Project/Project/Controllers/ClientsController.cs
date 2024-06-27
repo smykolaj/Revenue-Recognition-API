@@ -22,7 +22,6 @@ public class ClientsController : ControllerBase
         _clientsService = clientsService;
     }
     [Authorize]
-    [Tags("Create a new client")]
     [HttpPost("individuals")]
     public async Task<IActionResult> AddIndividualClient(IndividualPostDto client)
     {
@@ -44,7 +43,6 @@ public class ClientsController : ControllerBase
 
     }
     [Authorize]
-    [Tags("Create a new client")]
     [HttpPost("companies")]
     public async Task<IActionResult> AddCompanyClient(CompanyPostDto client)
     {
@@ -64,7 +62,6 @@ public class ClientsController : ControllerBase
         
     }
     [Authorize]
-    [Tags("Delete a client")]
     [HttpDelete("individuals/{idIndividual:long}")]
     public async Task<IActionResult> RemoveClient(long idIndividual)
     {

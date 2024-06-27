@@ -45,8 +45,8 @@ public class ContractsService : IContractsService
         var totalDiscountPercentage = await CalculateTotalDiscount(isReturningClient);
         var totalPrice = await CalculateTotalPrice(dto.IdSoftware, totalDiscountPercentage, dto.ContinuedSupportYears);
         
-        Contract newContract = _mapper.Map(dto, totalPrice, _unitOfWork.Contracts.ContractStatusCreated, dto.TypeOfClient);
-        ContractGetDto returnDto = _mapper.Map( await _unitOfWork.Contracts.AddContract(newContract));
+        var newContract = _mapper.Map(dto, totalPrice, _unitOfWork.Contracts.ContractStatusCreated, dto.TypeOfClient);
+        var returnDto = _mapper.Map( await _unitOfWork.Contracts.AddContract(newContract));
         return returnDto;
 
     }
