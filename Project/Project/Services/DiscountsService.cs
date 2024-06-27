@@ -8,9 +8,9 @@ namespace Project.Services;
 public class DiscountsService : IDiscountsService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public DiscountsService(IUnitOfWork unitOfWork, Mapper mapper)
+    public DiscountsService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;

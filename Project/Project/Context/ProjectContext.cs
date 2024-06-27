@@ -21,7 +21,6 @@ public class ProjectContext : DbContext
     public DbSet<Version> Versions { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Contract> Contracts { get; set; }
-    // public DbSet<ContractDiscount> ContractDiscounts { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<AppUser> AppUsers { get; set; }
@@ -85,7 +84,17 @@ public class ProjectContext : DbContext
             .WithMany(s => s.Versions)
             .HasForeignKey(v => v.IdSoftware)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
+        modelBuilder.Entity<AppUser>().HasData(new List<AppUser>()
+        {
+            new ()
+            {
+                Email = "a@a.com",
+                Login = "admin",
+                Password = "admin",
+                IsAdmin = true
+            }
+        });
 
         base.OnModelCreating(modelBuilder);
     }

@@ -10,9 +10,9 @@ namespace Project.Services;
 public class SoftwareService : ISoftwareService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public SoftwareService(IUnitOfWork unitOfWork, Mapper mapper)
+    public SoftwareService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
