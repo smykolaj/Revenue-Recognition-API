@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.Exceptions;
@@ -17,10 +18,8 @@ public class SoftwareController : ControllerBase
         _softwareService = softwareService;
     }
     
-    //TODO : find latest software version 
-    //TODO: get all, get by id
-
-
+   
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddNewSoftware(SoftwarePostDto dto)
     {
@@ -38,6 +37,7 @@ public class SoftwareController : ControllerBase
         } 
     }
     
+    [Authorize]
     [HttpPost("categories")]
     public async Task<IActionResult> AddNewCategory(CategoryPostDto dto)
     {
@@ -54,7 +54,7 @@ public class SoftwareController : ControllerBase
             return BadRequest(e.Message);
         } 
     }
-    
+    [Authorize]
     [HttpPost("{idSoftware:long}/versions")]
     public async Task<IActionResult> AddNewSoftwareVersion(long idSoftware, VersionPostDto dto)
     {

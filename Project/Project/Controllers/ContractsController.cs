@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
@@ -17,7 +18,7 @@ public class ContractsController : ControllerBase
     {
         _contractsService = contractsService;
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateContract(ContractPostDto dto)
     {
@@ -36,7 +37,7 @@ public class ContractsController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
+    [Authorize]
     [HttpPost("{idContract}/pay")]
     public async Task<IActionResult> PayForContract(long idContract, decimal amount)
     {

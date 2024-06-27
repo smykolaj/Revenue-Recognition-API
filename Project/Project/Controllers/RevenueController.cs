@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.Exceptions;
@@ -17,7 +18,7 @@ public class RevenueController : ControllerBase
         _revenueService = revenueService;
     }
 
-
+    [Authorize]
     [HttpGet("company")]
     public async Task<IActionResult> CalculateCompanyRevenue(string? currency, bool includePredictedRevenue)
     {
@@ -36,6 +37,7 @@ public class RevenueController : ControllerBase
         }
 
     }
+    [Authorize]
     [HttpGet("software/{softwareId:long}")]
     public async Task<IActionResult> CalculateProductRevenue(long softwareId, string? currency, bool includePredictedRevenue)
     {

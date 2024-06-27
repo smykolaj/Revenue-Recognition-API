@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project.DTOs;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
@@ -20,6 +21,7 @@ public class ClientsController : ControllerBase
     {
         _clientsService = clientsService;
     }
+    [Authorize]
     [Tags("Create a new client")]
     [HttpPost("individuals")]
     public async Task<IActionResult> AddIndividualClient(IndividualPostDto client)
@@ -41,7 +43,7 @@ public class ClientsController : ControllerBase
 
 
     }
-    
+    [Authorize]
     [Tags("Create a new client")]
     [HttpPost("companies")]
     public async Task<IActionResult> AddCompanyClient(CompanyPostDto client)
@@ -61,11 +63,16 @@ public class ClientsController : ControllerBase
         
         
     }
-    
+    [Authorize]
     [Tags("Delete a client")]
     [HttpDelete("individuals/{idIndividual:long}")]
     public async Task<IActionResult> RemoveClient(long idIndividual)
     {
+        if (!User.IsInRole("admin"))
+        {
+            return Unauthorized();
+        }
+        
         try
         {
             await _clientsService.SoftDeleteIndividualClient(idIndividual);
@@ -79,10 +86,14 @@ public class ClientsController : ControllerBase
             return BadRequest(e.Message);
         } 
     }
-
+    [Authorize]
     [HttpPut("individuals/{idIndividual:long}")]
     public async Task<IActionResult> UpdateDataAboutIndividual(long idIndividual, IndividualPutDto client)
-    {
+    {if (!User.IsInRole("admin"))
+        {
+            return Unauthorized();
+        }
+
         try
         {
            var res =  await _clientsService.UpdateDataAboutIndividual(idIndividual, client);
@@ -96,10 +107,14 @@ public class ClientsController : ControllerBase
             return BadRequest(e.Message);
         } 
     }
-    
+    [Authorize]
     [HttpPut("companies/{idCompany:long}")]
     public async Task<IActionResult> UpdateDataAboutCompany(long idCompany, CompanyPutDto client)
-    {
+    {if (!User.IsInRole("admin"))
+        {
+            return Unauthorized();
+        }
+
         try
         {
             var res = await _clientsService.UpdateDataAboutCompany(idCompany, client);

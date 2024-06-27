@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.Exceptions;
@@ -18,7 +19,7 @@ public class DiscountsController : ControllerBase
     {
         _discountsService = discountsService;
     }
-    
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddNewDiscount(DiscountPostDto dto)
     {
