@@ -9,9 +9,9 @@ namespace Project.Services;
 public class ContractsService : IContractsService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public ContractsService(Mapper mapper, IUnitOfWork unitOfWork)
+    public ContractsService(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;

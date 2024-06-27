@@ -3,11 +3,12 @@ using Project.DTOs.Get;
 using Project.DTOs.Post;
 using Project.DTOs.Put;
 using Project.Models;
+using Project.Services.Interfaces;
 using Version = Project.Models.Version;
 
 namespace Project.Services;
 
-public class Mapper
+public class Mapper : IMapper
 {
     public Individual Map(IndividualPostDto dto)
     {

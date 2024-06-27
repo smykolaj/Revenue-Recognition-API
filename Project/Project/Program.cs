@@ -9,8 +9,7 @@ using Project.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -22,7 +21,7 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddHttpClient<RevenueService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(Mapper));
+builder.Services.AddScoped<IMapper, Mapper>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -57,8 +56,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddDbContext<ProjectContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Docker")));
-// Add service with JWT authentication
-// Remember to add JWT configuration in appsettings
+
+
 builder.Services.AddAuthentication(
         options =>
         {
@@ -93,8 +92,8 @@ builder.Services.AddAuthentication(
     {
         opt.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,   //by who
-            ValidateAudience = true, //for whom
+            ValidateIssuer = true,   
+            ValidateAudience = true, 
             ValidateLifetime = false,
             ClockSkew = TimeSpan.FromMinutes(2),
             ValidIssuer = builder.Configuration["JWT:Issuer"],
@@ -105,7 +104,6 @@ builder.Services.AddAuthentication(
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

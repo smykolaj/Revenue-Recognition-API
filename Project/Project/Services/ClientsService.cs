@@ -13,9 +13,9 @@ namespace Project.Services;
 public class ClientsService : IClientsService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public ClientsService(Mapper mapper, IUnitOfWork unitOfWork)
+    public ClientsService(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;

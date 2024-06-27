@@ -32,5 +32,10 @@ namespace Project.Repositories
             await _context.SaveChangesAsync(); // Save changes
             return newPayment;
         }
+
+        public async Task<List<Payment>> GetPaymentsByContractId(long contractId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

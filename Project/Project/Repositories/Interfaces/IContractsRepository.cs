@@ -20,5 +20,6 @@ public interface IContractsRepository
     Task SetStatusToPending(long idContract);
     Task<decimal> GetContractPaymentsSum(long idcontract);
     Task<IEnumerable<Contract>> GetAllAsync();
-    Task<IEnumerable<Contract>> GetBySoftwareIdAsync(long softwareId);
+    Task<IEnumerable<Contract>> GetBySoftwareIdAsync(long softwareId); 
+    Task<Contract> GetById(long contractId);
 }

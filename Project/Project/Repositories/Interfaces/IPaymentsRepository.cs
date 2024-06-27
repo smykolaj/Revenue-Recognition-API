@@ -9,4 +9,5 @@ public interface IPaymentsRepository
     string PaymentStatusCancelled { get; }
     Task SetAllContractPaymentsToCancelled(long idContract);
     Task<Payment> AddPayment(Payment newPayment);
+    Task<List<Payment>> GetPaymentsByContractId(long contractId);
 }

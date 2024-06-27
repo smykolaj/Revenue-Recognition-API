@@ -119,6 +119,11 @@ namespace Project.Repositories
         {
             return await _context.Contracts.Where(c => c.IdSoftware == softwareId).ToListAsync();
         }
+
+        public Task<Contract> GetById(long contractId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
